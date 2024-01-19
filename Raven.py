@@ -1,4 +1,6 @@
-import openai
+from openai import OpenAI
+
+client = OpenAI(api_key="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")
 
 import speech_recognition as sr
 import pyttsx3
@@ -6,7 +8,6 @@ import time
 
 
 # Initialize OpenAI API
-openai.api_key = "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"
 
 # Initialize the text to speech engine
 engine = pyttsx3.init()
@@ -23,15 +24,13 @@ def transcribe_audio_to_text(filename):
 
 
 def generate_response(prompt):
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=4000,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
-    return response["choices"][0]["text"]
+    response = client.completions.create(engine="text-davinci-003",
+    prompt=prompt,
+    max_tokens=4000,
+    n=1,
+    stop=None,
+    temperature=0.5)
+    return response.choices[0].text
 
 def speak_text(text):
     engine.say(text)
